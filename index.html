@@ -84,6 +84,10 @@
         .submit-button:hover {
             background-color: #0056b3;
         }
+        .submit-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
         .disclaimer {
             font-size: 12px;
             color: #666666;
@@ -95,6 +99,42 @@
         }
         .disclaimer a:hover {
             text-decoration: underline;
+        }
+
+        .loading-spinner {
+            display: none;
+            margin-top: 20px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .loading-spinner div {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: #007bff;
+            margin-top: 10px;
+            font-weight: bold;
+            opacity: 0;
+            display: none;
+            animation: fadeIn 1s forwards;
+            color: #333;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -121,7 +161,14 @@
         <div class="error-message" id="userContactsError">Пожалуйста, введите ваши контактные данные.</div>
     </div>
     <div id="serverError" style="display:none; color:#ff0000; font-size:16px; margin-bottom:20px; text-align:center;"></div>
-    <button class="submit-button" onclick="submitForm()">Отправить</button>
+
+    <!-- Загрузка -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div></div>
+    </div>
+    <div id="loadingText" class="loading-text">Пожалуйста, подождите...</div>
+
+    <button class="submit-button" id="submitButton" onclick="submitForm()">Отправить</button>
     <p class="disclaimer">
         Нажимая кнопку отправить, вы соглашаетесь с
         <a href="https://telegra.ph/Soglashenie-na-obrabotku-personalnyh-dannyh-v-Telegram-bote-ZH-USLUGI-BOT-12-28">обработкой персональных данных</a> и
@@ -150,6 +197,12 @@
     }
 
     function submitForm() {
+        // Скрываем все ошибки перед отправкой
+        hideError('userName', 'userNameError');
+        hideError('userService', 'userServiceError');
+        hideError('userContacts', 'userContactsError');
+        document.getElementById('serverError').style.display = 'none';
+
         const userName = document.getElementById('userName').value.trim();
         const userService = document.getElementById('userService').value.trim();
         const userContacts = document.getElementById('userContacts').value.trim();
@@ -159,27 +212,26 @@
         if (!userName) {
             showError('userName', 'userNameError', 'Пожалуйста, введите ваше имя.');
             hasError = true;
-        } else {
-            hideError('userName', 'userNameError');
         }
 
         if (!userService) {
             showError('userService', 'userServiceError', 'Пожалуйста, введите вашу услугу.');
             hasError = true;
-        } else {
-            hideError('userService', 'userServiceError');
         }
 
         if (!userContacts) {
             showError('userContacts', 'userContactsError', 'Пожалуйста, введите ваши контактные данные.');
             hasError = true;
-        } else {
-            hideError('userContacts', 'userContactsError');
         }
 
         if (hasError) {
             return;
         }
+
+        // Делаем кнопку неактивной и показываем загрузку
+        document.getElementById('submitButton').disabled = true;
+        document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('loadingText').style.display = 'block';
 
         const userId = tg.initDataUnsafe?.user?.id;
 
@@ -199,6 +251,13 @@
         })
             .then(response => {
                 const serverError = document.getElementById('serverError');
+                // Скрываем анимацию загрузки после получения ответа
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('loadingText').style.display = 'none';
+
+                // Восстанавливаем кнопку
+                document.getElementById('submitButton').disabled = false;
+
                 if (response.ok) {
                     tg.close();
                 } else {
@@ -208,6 +267,13 @@
             })
             .catch(error => {
                 const serverError = document.getElementById('serverError');
+                // Скрываем анимацию загрузки после получения ответа
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('loadingText').style.display = 'none';
+
+                // Восстанавливаем кнопку
+                document.getElementById('submitButton').disabled = false;
+
                 serverError.textContent = 'Ошибка: ' + error.message;
                 serverError.style.display = 'block';
             });
