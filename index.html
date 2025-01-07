@@ -322,31 +322,22 @@
         fetchGroups();
     }
 
-    // Получаем путь из URL
-    const path = window.location.pathname;
-    const serviceId = path.includes('serviceId=') ? path.split('serviceId=')[1] : null;
+    // Извлечение параметра serviceId из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const serviceId = urlParams.get('serviceId');
 
-    // Функция для обработки serviceId
+    // Функция для обработки параметра serviceId
     function handleServiceId(serviceId) {
         const parsedId = parseInt(serviceId, 10); // Преобразуем в число
         if (!isNaN(parsedId)) {
             fetchServiceDetails(parsedId); // Загружаем детали услуги
         } else {
-            showError("Что-то пошло не так. Проверьте URL.");
+            console.warn("Некорректный serviceId в URL:", serviceId);
+            fetchGroups(); // Загружаем список групп, если параметр отсутствует или некорректен
         }
     }
 
-    // Функция для отображения ошибки
-    function showError(message) {
-        const content = document.getElementById('content');
-        content.innerHTML = `
-        <h2>Ошибка</h2>
-        <p>${message}</p>
-        <button class="back-button" onclick="fetchGroups()">Назад к группам</button>
-    `;
-    }
-
-    // Если serviceId есть, обрабатываем его, иначе загружаем группы
+    // Если параметр есть, загружаем услугу, иначе показываем группы
     if (serviceId) {
         handleServiceId(serviceId);
     } else {
