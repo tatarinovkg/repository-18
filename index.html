@@ -194,8 +194,6 @@
     tg.MainButton.text = "Закрыть приложение";
     tg.MainButton.onClick(() => tg.close());
     tg.MainButton.show();
-
-    const userId = tg.initDataUnsafe?.user?.id;
     
     function showError(fieldId, errorId, message) {
         const field = document.getElementById(fieldId);
@@ -251,7 +249,6 @@
 
         const data = {
             dataId: 'new_service',
-            userId: userId,
             name: userName,
             service: userService,
             contacts: userContacts
