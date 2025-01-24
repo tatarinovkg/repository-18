@@ -256,41 +256,26 @@
             contacts: userContacts
         };
 
-        fetch('https://tatarinovkg.cloudpub.ru/api/newService', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => {
-                const serverError = document.getElementById('serverError');
-                // Скрываем анимацию загрузки после получения ответа
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('loadingText').style.display = 'none';
+        try {
+            // Отправка данных через Telegram Web Apps API
+            tg.sendData(JSON.stringify(data));
 
-                // Восстанавливаем кнопку
-                document.getElementById('submitButton').disabled = false;
+            // Успешная отправка
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('loadingText').style.display = 'none';
+            tg.close(); // Закрываем приложение
+        } catch (error) {
+            const serverError = document.getElementById('serverError');
+            // Скрываем анимацию загрузки при ошибке
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('loadingText').style.display = 'none';
 
-                if (response.ok) {
-                    tg.close();
-                } else {
-                    serverError.textContent = 'Ошибка при отправке данных. Попробуйте ещё раз.';
-                    serverError.style.display = 'block';
-                }
-            })
-            .catch(error => {
-                const serverError = document.getElementById('serverError');
-                // Скрываем анимацию загрузки после получения ответа
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('loadingText').style.display = 'none';
+            // Восстанавливаем кнопку
+            document.getElementById('submitButton').disabled = false;
 
-                // Восстанавливаем кнопку
-                document.getElementById('submitButton').disabled = false;
-
-                serverError.textContent = 'Ошибка: ' + error.message;
-                serverError.style.display = 'block';
-            });
+            serverError.textContent = 'Ошибка: ' + error.message;
+            serverError.style.display = 'block';
+        }
     }
 </script>
 </body>
