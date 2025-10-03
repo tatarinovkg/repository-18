@@ -1,0 +1,34 @@
+html, body {
+  height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.select-box.error {
+  border-color: #ef4444;
+}
+
+.dropdown-item {
+  padding: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-item:active {
+  opacity: 0.9;
+}
+
+.dark .dropdown-item:hover {
+  background-color: rgba(148, 163, 184, 0.12);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(15, 23, 42, 0.05);
+}

@@ -1,0 +1,27 @@
+@media (hover: hover) and (pointer: fine) {
+  .hoverable:hover {
+    background-color: rgba(15, 23, 42, 0.06);
+  }
+
+  .dark .hoverable:hover {
+    background-color: rgba(148, 163, 184, 0.12);
+  }
+
+  .btn-primary {
+    background-color: #5B7CFA;
+  }
+
+  .btn-primary:hover {
+    background-color: #4B68D9;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary {
+    background-color: #5B7CFA;
+  }
+}
+
+.textarea-guard {
+  min-height: 48px;
+}
