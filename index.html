@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="format-detection" content="telephone=no">
-  <title>Добавить услугу</title>
+  <title>Добавить</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="./assets/js/tw-config.js"></script>
@@ -13,63 +13,116 @@
 </head>
 <body class="h-full bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
 <div id="app" class="min-h-full flex flex-col">
-  <header class="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800/80">
-  <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 h-14 flex items-center gap-3">
-    <h1 id="title" class="text-brand text-xl sm:text-2xl font-bold tracking-tight">Добавить услугу</h1>
-    <div class="ml-auto">
-      <button id="themeToggle" class="p-2 rounded-xl hoverable" aria-label="Тема"><span id="themeIcon">🌙</span></button>
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 h-14 flex items-center gap-3">
+      <h1 id="title" class="text-brand text-xl sm:text-2xl font-bold tracking-tight">Добавить услугу</h1>
+      <div class="ml-auto">
+        <button id="themeToggle" class="p-2 rounded-xl hoverable" aria-label="Переключить тему"><span id="themeIcon">☀</span></button>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-  <main class="mx-auto w-full max-w-2xl px-4 sm:px-6 lg:px-8 py-6">
+  <main class="mx-auto w-full max-w-2xl px-4 sm:px-6 lg:px-8 py-3">
     <div id="serverError" class="hidden rounded-xl border border-red-200 dark:border-red-900/40 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-200 p-3 text-sm"></div>
 
-    <section class="space-y-6">
-      <div>
-        <label for="shortDescription" class="block text-base font-medium">Краткое описание услуги <span class="text-slate-500">(до 38 символов)</span></label>
-        <p class="text-sm text-slate-500 mt-0.5">Например, маникюр</p>
-        <input id="shortDescription" maxlength="38" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
-        <p id="shortDescriptionError" class="hidden text-red-600 text-xs mt-1">Пожалуйста, введите краткое описание услуги.</p>
+    <section class="space-y-4">
+      <div class="pt-0.5 pb-0.5">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">
+            <span class="inline-flex h-2 w-2 rounded-full bg-gradient-to-r from-brand to-indigo-500 shadow-sm shadow-indigo-200"></span>
+            Добавить
+          </div>
+          <div class="inline-flex items-center rounded-full border border-slate-200 dark:border-slate-700 p-1" id="modeTabs">
+            <button type="button" data-mode="service" class="mode-tab px-3 py-1.5 rounded-full text-sm font-semibold transition">Услугу</button>
+            <button type="button" data-mode="organisation" class="mode-tab px-3 py-1.5 rounded-full text-sm font-semibold transition">Организацию</button>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label for="userService" class="block text-base font-medium">Ваша услуга (подробное описание, необязательно)</label>
-        <p class="text-sm text-slate-500 mt-0.5">Можно писать с переносами строк</p>
-        <textarea id="userService" rows="5" class="textarea-guard mt-2 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition resize-y"></textarea>
-        <p id="userServiceError" class="hidden text-red-600 text-xs mt-1"></p>
-      </div>
+      <section id="serviceForm" class="space-y-4">
+        <div>
+          <label for="shortDescription" class="block text-base font-medium">Краткое описание услуги <span class="text-slate-500">(до 38 символов)</span></label>
+          <p class="text-sm text-slate-500 mt-0.5">Например, Маникюр</p>
+          <input id="shortDescription" maxlength="38" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
+          <p id="shortDescriptionError" class="hidden text-red-600 text-xs mt-1">Заполните краткое описание.</p>
+        </div>
 
-      <div>
-        <label for="contactPerson" class="block text-base font-medium">Контактное лицо – имя</label>
-        <p class="text-sm text-slate-500 mt-0.5">Например, Александр</p>
-        <input id="contactPerson" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
-        <p id="contactPersonError" class="hidden text-red-600 text-xs mt-1">Пожалуйста, введите имя контактного лица.</p>
-      </div>
+        <div>
+          <label for="userService" class="block text-base font-medium">Ваша услуга, подробное описание <span class="text-slate-500">(необязательно)</span></label>
+          <p class="text-sm text-slate-500 mt-0.5">Можно писать с переносами строк</p>
+          <textarea id="userService" rows="5" class="textarea-guard mt-2 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition resize-y"></textarea>
+          <p id="userServiceError" class="hidden text-red-600 text-xs mt-1"></p>
+        </div>
 
-      <div>
-        <label for="userContacts" class="block text-base font-medium">Контакты</label>
-        <p class="text-sm text-slate-500 mt-0.5">Например, 8-999-99-99-999 и/или @username</p>
-        <input id="userContacts" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
-        <p id="userContactsError" class="hidden text-red-600 text-xs mt-1">Пожалуйста, введите контакты.</p>
-      </div>
+        <div class="space-y-3">
+          <div>
+            <label for="contactPerson" class="block text-base font-medium">Контактное лицо - имя</label>
+            <p class="text-sm text-slate-500 mt-0.5">Например, Александр</p>
+            <input id="contactPerson" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
+            <p id="contactPersonError" class="hidden text-red-600 text-xs mt-1">Укажите контактное лицо.</p>
+          </div>
 
-      <div>
-        <label class="block text-base font-medium">Выберите группу, в которой вы хотите разместить услугу (необязательно)</label>
-        <p class="text-sm text-slate-500 mt-0.5">Если вы не указали группу или указали её некорректно, администраторы бота выберут её на своё усмотрение</p>
-        <div id="groupSelect" class="mt-1 select-box w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 cursor-pointer">Загрузка групп...</div>
-        <p id="groupError" class="hidden text-red-600 text-xs mt-1"></p>
-        <div id="groupDropdown" class="dropdown-list hidden mt-1 max-h-60 overflow-y-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"></div>
-      </div>
+          <div>
+            <label for="userContacts" class="block text-base font-medium">Контакты</label>
+            <p class="text-sm text-slate-500 mt-0.5">Например, 8-999-99-99-999 и/или @username</p>
+            <input id="userContacts" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
+            <p id="userContactsError" class="hidden text-red-600 text-xs mt-1">Заполните контакты.</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-base font-medium">Выберите группу, в которой вы хотите разместить услугу <span class="text-slate-500">(необязательно)</span></label>
+          <p class="text-sm text-slate-500 mt-0.5">Если вы не указали группу или указали её некорректно, администраторы бота выберут её на своё усмотрение</p>
+          <div id="groupSelect" class="mt-1 select-box w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 cursor-pointer">Выберите группу</div>
+          <p id="groupError" class="hidden text-red-600 text-xs mt-1"></p>
+          <div id="groupDropdown" class="dropdown-list hidden mt-1 max-h-60 overflow-y-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"></div>
+        </div>
+      </section>
+
+      <section id="organisationForm" class="space-y-4 hidden">
+        <div>
+          <label for="orgName" class="block text-base font-medium">Название организации</label>
+          <p class="text-sm text-slate-500 mt-0.5">Например, Автошкола</p>
+          <input id="orgName" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
+          <p id="orgNameError" class="hidden text-red-600 text-xs mt-1">Укажите название организации.</p>
+        </div>
+
+        <div>
+          <label for="orgAddress" class="block text-base font-medium">Адрес</label>
+          <p class="text-sm text-slate-500 mt-0.5">Улица, проезд</p>
+          <input id="orgAddress" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
+          <p id="orgAddressError" class="hidden text-red-600 text-xs mt-1">Добавьте адрес.</p>
+        </div>
+
+        <div>
+          <label for="orgContacts" class="block text-base font-medium">Контакты</label>
+          <p class="text-sm text-slate-500 mt-0.5">Например, 8-999-99-99-999 и/или @username, также можно указать почту</p>
+          <input id="orgContacts" type="text" class="mt-1 w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand text-base transition">
+          <p id="orgContactsError" class="hidden text-red-600 text-xs mt-1">Оставьте контакты.</p>
+        </div>
+
+        <div>
+          <label class="block text-base font-medium">Группа организаций <span class="text-slate-500">(по желанию)</span></label>
+          <p class="text-sm text-slate-500 mt-0.5">Если вы не указали группу или указали её некорректно, администраторы бота выберут её на своё усмотрение</p>
+          <div id="orgGroupSelect" class="mt-1 select-box w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 cursor-pointer">Выберите группу</div>
+          <p id="orgGroupError" class="hidden text-red-600 text-xs mt-1"></p>
+          <div id="orgGroupDropdown" class="dropdown-list hidden mt-1 max-h-60 overflow-y-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"></div>
+        </div>
+      </section>
 
       <div id="loadingBlock" class="hidden flex flex-col items-center justify-center py-2 gap-2">
         <div class="w-10 h-10 border-2 border-slate-300 dark:border-slate-700 border-t-brand rounded-full animate-spin"></div>
-        <p id="loadingText" class="text-sm text-slate-500">Пожалуйста, подождите...</p>
+        <p id="loadingText" class="text-sm text-slate-500">Отправляем данные...</p>
       </div>
 
       <button id="submitButton" class="w-full rounded-2xl btn-primary text-white px-4 py-3 text-base font-medium active:scale-[0.997] transition">Отправить</button>
 
-      <p class="text-sm text-slate-500 text-center">Нажимая кнопку "Отправить", вы соглашаетесь с <a class="underline underline-offset-2" href="https://telegra.ph/Soglashenie-na-obrabotku-personalnyh-dannyh-v-Telegram-bote-ZH-USLUGI-BOT-12-28" target="_blank" rel="noopener noreferrer">обработкой персональных данных</a> и <a class="underline underline-offset-2" href="https://telegra.ph/Politika-konfidencialnosti-Telegram-bota-ZH-USLUGI-BOT-12-28" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a> бота.</p>
+      <p class="text-sm text-slate-500 text-center">
+        Нажимая «Отправить», вы соглашаетесь с
+        <a class="underline underline-offset-2" href="https://telegra.ph/Soglashenie-na-obrabotku-personalnyh-dannyh-v-Telegram-bote-ZH-USLUGI-BOT-12-28" target="_blank" rel="noopener noreferrer">Соглашением</a>
+        и
+        <a class="underline underline-offset-2" href="https://telegra.ph/Politika-konfidencialnosti-Telegram-bota-ZH-USLUGI-BOT-12-28" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>.
+      </p>
     </section>
   </main>
 
