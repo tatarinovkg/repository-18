@@ -219,7 +219,7 @@ function submitServiceForm() {
     service: userService,
     contactPerson,
     contacts: userContacts,
-    groupId: selectedServiceGroupId
+    groupId: selectedServiceGroupId ?? 0
   };
 
   setLoading(true, 'Отправляем услугу...');
@@ -266,7 +266,7 @@ function submitOrganisationForm() {
     name: orgName,
     adress: orgAddress,
     contacts: orgContacts,
-    groupId: selectedOrgGroupId
+    groupId: selectedOrgGroupId ?? 0
   };
 
   setLoading(true, 'Отправляем организацию...');
