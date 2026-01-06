@@ -1,5 +1,5 @@
 const tg = window.Telegram ? window.Telegram.WebApp : null;
-const apiBaseUrl = 'https://bot.ovimex72.ru/api/';
+const apiBaseUrl = 'https://api.s.tkgn.ru/api/';
 
 let selectedServiceGroupId = null;
 let selectedOrgGroupId = null;
